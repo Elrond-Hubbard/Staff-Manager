@@ -1,4 +1,16 @@
 const inquirer = require("inquirer");
+
+// const mysql = require("mysql2");
+// const db = mysql.createConnection(
+//   {
+//     host: "localhost",
+//     user: "root",
+//     password: "FistOf5",
+//     database: "staff_db",
+//   },
+//   console.log(`Connected to the staff_db database.`)
+// );
+
 const {
   options,
   newDeps,
