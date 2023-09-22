@@ -25,10 +25,18 @@ function init() {
     }
     // ADD A ROLE
     if (answers.option === "addRole") {
-      inquirer.prompt(staffManager.newRole).then((answers) => {
-        console.table(answers);
-        init();
-      });
+      // A promise is returned containing a queried array
+      SQL.promiseList("departments", "name")
+        // results of the query are returned
+        .then((results) => {
+          // and passed into the prompt object
+          staffManager.newRole[2].choices = results;
+          return inquirer.prompt(staffManager.newRole);
+        })
+        .then((answers) => {
+          console.log(answers);
+          init();
+        });
     }
     // ADD AN EMPLOYEE
     if (answers.option === "addEmployee") {
