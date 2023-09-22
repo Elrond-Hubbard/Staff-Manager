@@ -10,52 +10,56 @@ const db = mysql.createConnection(
   console.log(`Connected to the staff_db database.`)
 );
 module.exports = db;
-// The 
-const staffManager = require("./lib/prompts");
-const SQL = require('./lib/sql_utils')
 
+const staffManager = require("./lib/prompts");
+const SQL = require("./lib/sql_utils");
 
 function init() {
   inquirer.prompt(staffManager.options).then((answers) => {
     // ADD A DEPARTMENT
     if (answers.option === "addDepartment") {
       inquirer.prompt(staffManager.newDeps).then((answers) => {
-        SQL.insertValue('departments', 'name', answers.newDepartment)
+        SQL.insertValue("departments", "name", answers.newDepartment);
         init();
       });
-    //   ADD A ROLE
-    } else if (answers.option === "addRole") {
+    }
+    // ADD A ROLE
+    if (answers.option === "addRole") {
       inquirer.prompt(staffManager.newRole).then((answers) => {
-        roleList.push(answers.newRoleName);
-        console.log(answers);
+        console.table(answers);
         init();
       });
-    //   ADD AN EMPLOYEE
-    } else if (answers.option === "addEmployee") {
+    }
+    // ADD AN EMPLOYEE
+    if (answers.option === "addEmployee") {
       inquirer.prompt(staffManager.newEmp).then((answers) => {
-        employees.push(`${answers.newEmpName} ${answers.newEmpLast}`);
-        console.log(answers);
+        console.table(answers);
         init();
       });
-    //   UPDATE EMPLOYEE ROLE
-    } else if (answers.option === "updateEmployee") {
+    }
+    // UPDATE AN EMPLOYEE
+    if (answers.option === "updateEmployee") {
       inquirer.prompt(staffManager.updateEmp).then((answers) => {
-        console.log(answers);
+        console.table(answers);
         init();
       });
-    //   SHOW ALL DEPARTMENTS
-    } else if (answers.option === "DEPARTMENTS") {
-      SQL.getTable('departments')
+    }
+    // VIEW ALL DEPARTMENTS
+    if (answers.option === "DEPARTMENTS") {
+      SQL.getTable("departments");
       init();
-    //   SHOW ALL ROLES
-    } else if (answers.option === "ROLES") {
-      SQL.getTable('roles')
+    }
+    // VIEW ALL ROLES
+    if (answers.option === "ROLES") {
+      SQL.getTable("roles");
       init();
-    //   SHOW ALL EMPLOYEES
-    } else if (answers.option === "EMPLOYEES") {
-      SQL.getTable('employees')
+    }
+    // VIEW ALL EMPLOYEES
+    if (answers.option === "EMPLOYEES") {
+      SQL.getTable("employees");
       init();
     }
   });
 }
+
 init();
