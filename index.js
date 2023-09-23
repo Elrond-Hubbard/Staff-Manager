@@ -15,6 +15,7 @@ const staffManager = require("./lib/prompts");
 const SQL = require("./lib/sql_utils");
 
 function init() {
+  console.clear()
   inquirer.prompt(staffManager.options).then((answers) => {
     // VIEW ALL DEPARTMENTS
     if (answers.option === "DEPARTMENTS") {
