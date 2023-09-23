@@ -44,7 +44,7 @@ function init() {
       SQL.promiseList("roles", "title").then((results) => {
         staffManager.newEmp[2].choices = results;
       });
-      SQL.promiseList("employees", "last_name")
+      SQL.promiseList("employees", "CONCAT (first_name, ' ', last_name)")
         .then((results) => {
           staffManager.newEmp[3].choices = results;
           return inquirer.prompt(staffManager.newEmp);
@@ -61,7 +61,7 @@ function init() {
     }
     // UPDATE AN EMPLOYEE
     if (answers.option === "updateEmployee") {
-      SQL.promiseList("employees", "last_name").then((results) => {
+      SQL.promiseList("employees", "CONCAT (first_name, ' ', last_name)").then((results) => {
         staffManager.updateEmp[0].choices = results;
       });
       SQL.promiseList("roles", "title")
