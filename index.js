@@ -40,17 +40,37 @@ function init() {
     }
     // ADD AN EMPLOYEE
     if (answers.option === "addEmployee") {
-      inquirer.prompt(staffManager.newEmp).then((answers) => {
-        console.table(answers);
-        init();
+      SQL.promiseList("roles", "title").then((results) => {
+        staffManager.newEmp[2].choices = results;
       });
+      SQL.promiseList("employees", "last_name")
+        .then((results) => {
+          staffManager.newEmp[3].choices = results;
+          return inquirer.prompt(staffManager.newEmp);
+        })
+        .then((answers) => {
+          console.log(answers);
+          init();
+        });
+      // inquirer.prompt(staffManager.newEmp).then((answers) => {
+      //   console.table(answers);
+      //   init();
+      // });
     }
     // UPDATE AN EMPLOYEE
     if (answers.option === "updateEmployee") {
-      inquirer.prompt(staffManager.updateEmp).then((answers) => {
-        console.table(answers);
-        init();
+      SQL.promiseList("employees", "last_name").then((results) => {
+        staffManager.updateEmp[0].choices = results;
       });
+      SQL.promiseList("roles", "title")
+        .then((results) => {
+          staffManager.updateEmp[1].choices = results;
+          return inquirer.prompt(staffManager.updateEmp);
+        })
+        .then((answers) => {
+          console.log(answers);
+          init();
+        });
     }
     // VIEW ALL DEPARTMENTS
     if (answers.option === "DEPARTMENTS") {
