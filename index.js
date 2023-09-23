@@ -16,6 +16,33 @@ const SQL = require("./lib/sql_utils");
 
 function init() {
   inquirer.prompt(staffManager.options).then((answers) => {
+    // VIEW ALL DEPARTMENTS
+    if (answers.option === "DEPARTMENTS") {
+      SQL.getTable("departments");
+      init();
+    }
+    // VIEW ALL ROLES
+    if (answers.option === "ROLES") {
+      SQL.showRoles();
+      init();
+    }
+    // VIEW ALL EMPLOYEES
+    if (answers.option === "EMPLOYEES") {
+      SQL.showEmployees();
+      init();
+    }
+    if (answers.option === "viewBudget") {
+      SQL.promiseList("departments", "name")
+        .then((results) => {
+          staffManager.viewBudget[0].choices = results;
+          return inquirer.prompt(staffManager.viewBudget);
+        })
+        .then((answers) => {
+          SQL.showBudget(answers.depBudget);
+          console.log(answers)
+          init();
+        });
+    }
     // ADD A DEPARTMENT
     if (answers.option === "addDepartment") {
       inquirer.prompt(staffManager.newDeps).then((answers) => {
@@ -61,9 +88,11 @@ function init() {
     }
     // UPDATE AN EMPLOYEE
     if (answers.option === "updateEmployee") {
-      SQL.promiseList("employees", "CONCAT (first_name, ' ', last_name)").then((results) => {
-        staffManager.updateEmp[0].choices = results;
-      });
+      SQL.promiseList("employees", "CONCAT (first_name, ' ', last_name)").then(
+        (results) => {
+          staffManager.updateEmp[0].choices = results;
+        }
+      );
       SQL.promiseList("roles", "title")
         .then((results) => {
           staffManager.updateEmp[1].choices = results;
@@ -73,21 +102,6 @@ function init() {
           SQL.updateEmployee(answers.updateEmpName, answers.updateEmpRole);
           init();
         });
-    }
-    // VIEW ALL DEPARTMENTS
-    if (answers.option === "DEPARTMENTS") {
-      SQL.getTable("departments");
-      init();
-    }
-    // VIEW ALL ROLES
-    if (answers.option === "ROLES") {
-      SQL.showRoles()
-      init();
-    }
-    // VIEW ALL EMPLOYEES
-    if (answers.option === "EMPLOYEES") {
-      SQL.showEmployees();
-      init();
     }
   });
 }
