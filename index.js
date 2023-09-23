@@ -19,6 +19,7 @@ function init() {
     // VIEW ALL DEPARTMENTS
     if (answers.option === "DEPARTMENTS") {
       SQL.getTable("departments");
+      // init() is called at the end of each query to restart the CLI
       init();
     }
     // VIEW ALL ROLES
@@ -31,15 +32,18 @@ function init() {
       SQL.showEmployees();
       init();
     }
+    // VIEW DEPARTMENT BUDGET
     if (answers.option === "viewBudget") {
+      // The database is queried for a list of departments
       SQL.promiseList("departments", "name")
+        // results of the query are returned
         .then((results) => {
+          // and passed into the prompt's choices array
           staffManager.viewBudget[0].choices = results;
           return inquirer.prompt(staffManager.viewBudget);
         })
         .then((answers) => {
           SQL.showBudget(answers.depBudget);
-          console.log(answers)
           init();
         });
     }
@@ -86,7 +90,7 @@ function init() {
           init();
         });
     }
-    // UPDATE AN EMPLOYEE
+    // UPDATE EMPLOYEE ROLE
     if (answers.option === "updateEmployee") {
       SQL.promiseList("employees", "CONCAT (first_name, ' ', last_name)").then(
         (results) => {
@@ -103,6 +107,7 @@ function init() {
           init();
         });
     }
+    // UPDATE EMPLOYEE MANAGER
   });
 }
 
