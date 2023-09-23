@@ -108,6 +108,18 @@ function init() {
         });
     }
     // UPDATE EMPLOYEE MANAGER
+    if (answers.option === "updateBoss") {
+      SQL.promiseList("employees", "CONCAT (first_name, ' ', last_name)")
+        .then((results) => {
+          staffManager.updateBoss[0].choices = results;
+          staffManager.updateBoss[1].choices = results;
+          return inquirer.prompt(staffManager.updateBoss)
+        })
+        .then((answers) => {
+          SQL.updateManager(answers.empId, answers.bossId);
+          init();
+        })
+    }
   });
 }
 
