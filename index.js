@@ -34,7 +34,11 @@ function init() {
           return inquirer.prompt(staffManager.newRole);
         })
         .then((answers) => {
-          console.log(answers);
+          SQL.insertRole(
+            answers.newRoleName,
+            parseInt(answers.newRoleSalary),
+            answers.newRoleDepartment
+          );
           init();
         });
     }
@@ -52,10 +56,6 @@ function init() {
           console.log(answers);
           init();
         });
-      // inquirer.prompt(staffManager.newEmp).then((answers) => {
-      //   console.table(answers);
-      //   init();
-      // });
     }
     // UPDATE AN EMPLOYEE
     if (answers.option === "updateEmployee") {
