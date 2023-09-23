@@ -25,18 +25,15 @@ function init() {
     }
     // ADD A ROLE
     if (answers.option === "addRole") {
-      // A promise is returned containing a queried array
       SQL.promiseList("departments", "name")
-        // results of the query are returned
         .then((results) => {
-          // and passed into the prompt object
           staffManager.newRole[2].choices = results;
           return inquirer.prompt(staffManager.newRole);
         })
         .then((answers) => {
           SQL.insertRole(
             answers.newRoleName,
-            parseInt(answers.newRoleSalary),
+            answers.newRoleSalary,
             answers.newRoleDepartment
           );
           init();
@@ -53,7 +50,12 @@ function init() {
           return inquirer.prompt(staffManager.newEmp);
         })
         .then((answers) => {
-          console.log(answers);
+          SQL.insertEmployee(
+            answers.newEmpName,
+            answers.newEmpLast,
+            answers.newEmpRole,
+            answers.newEmpBoss
+          );
           init();
         });
     }
@@ -68,7 +70,7 @@ function init() {
           return inquirer.prompt(staffManager.updateEmp);
         })
         .then((answers) => {
-          console.log(answers);
+          SQL.updateEmployee(answers.updateEmpName, answers.updateEmpRole);
           init();
         });
     }
@@ -79,12 +81,12 @@ function init() {
     }
     // VIEW ALL ROLES
     if (answers.option === "ROLES") {
-      SQL.getTable("roles");
+      SQL.showRoles()
       init();
     }
     // VIEW ALL EMPLOYEES
     if (answers.option === "EMPLOYEES") {
-      SQL.getTable("employees");
+      SQL.showEmployees();
       init();
     }
   });
