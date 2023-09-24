@@ -1,7 +1,7 @@
 # Staff Manager
   ![github-license](https://img.shields.io/badge/License-MIT-blue.svg)
 
-  [![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/eQ7GYrPgtWU/0.jpg)](https://www.youtube.com/watch?v=eQ7GYrPgtWU)
+  [![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/XEe_7kg8d48/0.jpg)](https://www.youtube.com/watch?v=XEe_7kg8d48)
 
   ## Description
   Staff Manager is a simple CLI app for managing a MySQL database. Users can view various tables from the database and update them as needed.
