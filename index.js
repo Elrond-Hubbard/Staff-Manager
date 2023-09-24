@@ -15,23 +15,18 @@ const staffManager = require("./lib/prompts");
 const SQL = require("./lib/sql_utils");
 
 function init() {
-  console.clear()
   inquirer.prompt(staffManager.options).then((answers) => {
     // VIEW ALL DEPARTMENTS
     if (answers.option === "DEPARTMENTS") {
-      SQL.getTable("departments");
-      // init() is called at the end of each query to restart the CLI
-      init();
+      SQL.showDepartment().then(() => init());
     }
     // VIEW ALL ROLES
     if (answers.option === "ROLES") {
-      SQL.showRoles();
-      init();
+      SQL.showRoles().then(() => init());
     }
     // VIEW ALL EMPLOYEES
     if (answers.option === "EMPLOYEES") {
-      SQL.showEmployees();
-      init();
+      SQL.showEmployees().then(() => init());
     }
     // VIEW DEPARTMENT BUDGET
     if (answers.option === "viewBudget") {
@@ -44,15 +39,15 @@ function init() {
           return inquirer.prompt(staffManager.viewBudget);
         })
         .then((answers) => {
-          SQL.showBudget(answers.depBudget);
-          init();
+          SQL.showBudget(answers.depBudget).then(() => init());
         });
     }
     // ADD A DEPARTMENT
     if (answers.option === "addDepartment") {
       inquirer.prompt(staffManager.newDeps).then((answers) => {
-        SQL.insertValue("departments", "name", answers.newDepartment);
-        init();
+        SQL.insertValue("departments", "name", answers.newDepartment).then(() =>
+          init()
+        );
       });
     }
     // ADD A ROLE
@@ -67,8 +62,7 @@ function init() {
             answers.newRoleName,
             answers.newRoleSalary,
             answers.newRoleDepartment
-          );
-          init();
+          ).then(() => init());
         });
     }
     // ADD AN EMPLOYEE
@@ -87,8 +81,7 @@ function init() {
             answers.newEmpLast,
             answers.newEmpRole,
             answers.newEmpBoss
-          );
-          init();
+          ).then(() => init());
         });
     }
     // UPDATE EMPLOYEE ROLE
@@ -104,8 +97,9 @@ function init() {
           return inquirer.prompt(staffManager.updateEmp);
         })
         .then((answers) => {
-          SQL.updateEmployee(answers.updateEmpName, answers.updateEmpRole);
-          init();
+          SQL.updateEmployee(answers.updateEmpName, answers.updateEmpRole).then(
+            () => init()
+          );
         });
     }
     // UPDATE EMPLOYEE MANAGER
@@ -114,12 +108,11 @@ function init() {
         .then((results) => {
           staffManager.updateBoss[0].choices = results;
           staffManager.updateBoss[1].choices = results;
-          return inquirer.prompt(staffManager.updateBoss)
+          return inquirer.prompt(staffManager.updateBoss);
         })
         .then((answers) => {
-          SQL.updateManager(answers.empId, answers.bossId);
-          init();
-        })
+          SQL.updateManager(answers.empId, answers.bossId).then(() => init());
+        });
     }
   });
 }
